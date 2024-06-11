@@ -20,13 +20,10 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'created_at', 'status', 'user']
 
     def create(self, validated_data):
-        # Extract uploaded images from validated data
         uploaded_images = validated_data.pop('uploaded_images', [])
 
-        # Create the product instance
         product = Product.objects.create(**validated_data, user=self.context['request'].user)
 
-        # Create ProductImage instances for each uploaded image
         for image in uploaded_images:
             ProductImage.objects.create(product=product, image=image)
 
